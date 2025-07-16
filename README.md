@@ -94,6 +94,9 @@ Create a `.env` file with:
 OPENAI_API_KEY=your_openai_key
 ```
 
+The project uses `python-dotenv` so this file will be loaded automatically when
+the agent starts.
+
 ---
 
 ## 🛠️ Core Capabilities Demonstrated
