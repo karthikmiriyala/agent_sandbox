@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-"""A simple calculator tool."""
-
-def calculate(expression: str) -> float:
-    """Evaluate a math expression using Python's eval."""
-    try:
-        return float(eval(expression, {"__builtins__": {}}))
-    except Exception:
-        raise ValueError("Invalid expression")
-=======
 """A simple calculator tool exposed as a LangChain ``Tool``."""
 
 from langchain.tools import tool
@@ -23,4 +13,3 @@ def calculate(expression: str) -> str:
 
 
 TOOLS = [calculate]
->>>>>>> 943389f03079c71901d6e2fe832f3ac596696f09

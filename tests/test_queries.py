@@ -1,14 +1,8 @@
 """Example tests for the sandbox."""
 
-<<<<<<< HEAD
-
-import openai
-from agents.simple_agent import SimpleAgent
-=======
 import openai
 from agents.simple_agent import SimpleAgent
 from agents.tool_agent import ToolAgent
->>>>>>> 943389f03079c71901d6e2fe832f3ac596696f09
 
 
 def test_simple_agent(monkeypatch):
@@ -24,8 +18,6 @@ def test_simple_agent(monkeypatch):
     assert openai.api_key == "test-key"
     assert agent.respond("hello") == "hi"
 
-<<<<<<< HEAD
-=======
 
 def test_tool_agent():
     """Verify tools run via ToolAgent."""
@@ -35,4 +27,3 @@ def test_tool_agent():
     assert agent.run_tool("Calculator", "2+2") == "4.0"
     assert agent.run_tool("Search", "test") == "Results for: test"
     assert agent.run_tool("Execute", "result = 5") == "5"
->>>>>>> 943389f03079c71901d6e2fe832f3ac596696f09
