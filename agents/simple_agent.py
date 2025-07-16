@@ -1,4 +1,3 @@
-
 """Very small agent that simply forwards prompts to OpenAI."""
 
 from __future__ import annotations
@@ -33,4 +32,3 @@ class SimpleAgent:
         messages = self._build_messages(prompt)
         response = openai.ChatCompletion.create(model=self.model, messages=messages)
         return response["choices"][0]["message"]["content"].strip()
-
