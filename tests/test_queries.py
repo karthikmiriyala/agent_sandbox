@@ -1,5 +1,6 @@
 """Example tests for the sandbox."""
 
+
 import openai
 from agents.simple_agent import SimpleAgent
 
@@ -14,3 +15,4 @@ def test_simple_agent(monkeypatch):
 
     agent = SimpleAgent()
     assert agent.respond("hello") == "hi"
+
