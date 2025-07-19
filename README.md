@@ -97,6 +97,16 @@ OPENAI_API_KEY=your_openai_key
 The project uses `python-dotenv` so this file will be loaded automatically when
 the agent starts.
 
+### 5. Run the CLI
+
+Start an interactive session with one of the available agents:
+
+```bash
+python main.py --agent react
+```
+
+Valid options for `--agent` are `simple`, `react`, `reflection`, and `multi`.
+
 ---
 
 ## 🛠️ Core Capabilities Demonstrated
