@@ -64,6 +64,29 @@ agent_sandbox/
 
 ---
 
+## 🏗 Architecture Overview
+
+Below is a high-level depiction of how a prompt flows through the project.
+
+```mermaid
+graph LR
+    U(User) -->|"prompt"| CLI["main.py CLI"]
+    CLI --> A["Agent"]
+    A --> MEM["Memory Manager"]
+    A --> T["Tools"]
+    A --> LLM["OpenAI API"]
+    MEM --> A
+    T --> A
+    LLM --> A
+    A -->|"response"| CLI
+    CLI --> U
+```
+
+The CLI routes your request to the selected agent. That agent can pull context
+from memory, invoke tools, and call the OpenAI API before returning a response.
+
+---
+
 ## ⚙️ Setup Instructions
 
 ### 1. Clone the Repo
@@ -93,6 +116,19 @@ Create a `.env` file with:
 ```
 OPENAI_API_KEY=your_openai_key
 ```
+
+The project uses `python-dotenv` so this file will be loaded automatically when
+the agent starts.
+
+### 5. Run the CLI
+
+Start an interactive session with one of the available agents:
+
+```bash
+python main.py --agent react
+```
+
+Valid options for `--agent` are `simple`, `react`, `reflection`, and `multi`.
 
 ---
 
@@ -141,7 +177,8 @@ Test your agent step-by-step:
 ### ✅ Step 2: Add Tools
 - Use LangChain's `Tool` abstraction.
 - Add calculator, search, and code executor.
-- File: `tools/*.py`, `agents/tool_agent.py`
+- Wrapper class `ToolAgent` exposes these utilities.
+- Files: `tools/*.py`, `agents/tool_agent.py`
 
 ### ✅ Step 3: Integrate Memory
 - Use `ConversationBufferMemory` or custom memory.
