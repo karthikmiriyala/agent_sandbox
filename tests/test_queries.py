@@ -79,3 +79,51 @@ def test_react_agent(monkeypatch):
     assert agent.respond("calc") == "4.0"
     assert len(calls) == 2
     assert "Observation: 4.0" in calls[1][-1]["content"]
+
+
+def test_reflection_agent(monkeypatch):
+    """ReflectionAgent should critique and improve answers."""
+
+    from agents.reflection_agent import ReflectionAgent
+
+    def fake_base(question):
+        return "bad answer"
+
+    class DummyAgent:
+        def respond(self, q):
+            return fake_base(q)
+
+    responses = ["Critique\nFinal Answer: good"]
+
+    def fake_create(model, messages):
+        return {"choices": [{"message": {"content": responses.pop(0)}}]}
+
+    monkeypatch.setattr(openai.ChatCompletion, "create", fake_create)
+    monkeypatch.setenv("OPENAI_API_KEY", "k")
+
+    agent = ReflectionAgent(base_agent=DummyAgent())
+    assert agent.respond("q") == "good"
+
+
+def test_multi_agent(monkeypatch):
+    """MultiAgent should chain planner, executor, and critic."""
+
+    from agents.multi_agent import MultiAgent
+
+    calls = []
+
+    def fake_create(model, messages):
+        calls.append(messages)
+        # planner -> executor -> critic
+        if len(calls) == 1:
+            return {"choices": [{"message": {"content": "do 2+2"}}]}
+        elif len(calls) == 2:
+            return {"choices": [{"message": {"content": "Final Answer: 4.0"}}]}
+        else:
+            return {"choices": [{"message": {"content": "Final Answer: ok"}}]}
+
+    monkeypatch.setattr(openai.ChatCompletion, "create", fake_create)
+    monkeypatch.setenv("OPENAI_API_KEY", "k")
+
+    agent = MultiAgent()
+    assert agent.run("calc") == "ok"
