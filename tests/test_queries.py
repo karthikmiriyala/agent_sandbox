@@ -54,3 +54,28 @@ def test_memory_tracking(monkeypatch):
         {"role": "user", "content": "third"},
         {"role": "assistant", "content": "ok"},
     ]
+
+
+def test_react_agent(monkeypatch):
+    """ReActAgent should call tools based on LLM output."""
+
+    from agents.react_agent import ReActAgent
+
+    responses = [
+        "Thought: use math\nAction: Calculator[2+2]",
+        "Thought: done\nFinal Answer: 4.0",
+    ]
+
+    calls = []
+
+    def fake_create(model, messages):
+        calls.append(messages)
+        return {"choices": [{"message": {"content": responses.pop(0)}}]}
+
+    monkeypatch.setattr(openai.ChatCompletion, "create", fake_create)
+    monkeypatch.setenv("OPENAI_API_KEY", "key")
+
+    agent = ReActAgent()
+    assert agent.respond("calc") == "4.0"
+    assert len(calls) == 2
+    assert "Observation: 4.0" in calls[1][-1]["content"]
